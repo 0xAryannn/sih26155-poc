@@ -1,37 +1,84 @@
-"""
-Quick integration test: config_loader.py + auditor.py (teammate's parse function)
-
-Run from /home/claude/ with:
-    python3 run_audit.py cisco_bad.cfg
-    python3 run_audit.py cisco_good.cfg
-    python3 run_audit.py cisco_partial.cfg
-"""
-
 import sys
 from config_loader import load_config
-from auditor import parse  # teammate's file - must exist alongside this script
+from auditor import audit_configuration, save_report
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python3 run_audit.py <config_filename>")
+    if len(sys.argv) != 2:
+        print("Usage: python run_audit.py <config_filename>")
         sys.exit(1)
 
     filename = sys.argv[1]
-    vendor, raw_text = load_config(filename)
 
-    settings, unknown, lines = parse(raw_text)
+    try:
+        vendor, raw_text = load_config(filename)
+    except (FileNotFoundError, ValueError) as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 
-    print(f"File: {filename}  |  Vendor: {vendor}")
-    print(f"Total non-empty lines parsed: {len(lines)}")
+    print("=" * 40)
+    print("NETWORK SECURITY AUDIT")
+    print("=" * 40)
+
+    print(f"\nFile: {filename}")
+    print(f"Vendor: {vendor}")
+
+    # Run the complete auditor
+    report = audit_configuration(
+        raw_text,
+        filename
+    )
+
+    print("\n" + "=" * 40)
+    print("AUDIT RESULTS")
+    print("=" * 40)
+
+    print(
+        f"\nSecurity Score: "
+        f"{report['security_score']}/100"
+    )
+
+    print(
+        f"Risk Level: "
+        f"{report['risk_level']}"
+    )
+
+    print("\nFINDINGS")
     print("-" * 40)
-    print("Recognized settings:")
-    for k, v in settings.items():
-        print(f"  {k}: {v}")
-    print("-" * 40)
-    print(f"Unknown commands ({len(unknown)}):")
-    for line in unknown:
-        print(f"  {line}")
+
+    for finding in report["findings"]:
+        print(
+            f"\n[{finding['severity']}] "
+            f"{finding['check']}"
+        )
+
+        print(
+            f"Status: "
+            f"{finding['status']}"
+        )
+
+        print(
+            f"Evidence: "
+            f"{finding['evidence']}"
+        )
+
+    print("\n" + "=" * 40)
+    print("UNKNOWN COMMANDS")
+    print("=" * 40)
+
+    unknown = report.get("unknown_commands", [])
+
+    if unknown:
+        for command in unknown:
+            print(f"  {command}")
+    else:
+        print("None")
+
+    # Save report
+    save_report(
+        report,
+        "audit_report.json"
+    )
 
 
 if __name__ == "__main__":

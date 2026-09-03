@@ -1,5 +1,5 @@
 {
-    "device": "EDGE-R1",
+    "device": "cisco_bad.cfg",
     "security_score": 10,
     "risk_level": "CRITICAL",
     "recognized_settings": {
