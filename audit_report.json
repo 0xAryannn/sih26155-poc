@@ -1,0 +1,61 @@
+{
+    "device": "EDGE-R1",
+    "security_score": 10,
+    "risk_level": "CRITICAL",
+    "recognized_settings": {
+        "enable_password": "cisco123",
+        "remote_access": "telnet",
+        "snmp": "public RO",
+        "http_server_enabled": false
+    },
+    "compliance_results": {
+        "telnet_disabled": false,
+        "snmp_not_default": false,
+        "passwords_encrypted": false,
+        "enable_password_not_weak": false,
+        "ssh_only_access": false,
+        "http_server_disabled": true
+    },
+    "findings": [
+        {
+            "check": "Telnet disabled",
+            "severity": "HIGH",
+            "status": "FAIL",
+            "evidence": "transport input telnet"
+        },
+        {
+            "check": "Default SNMP community",
+            "severity": "HIGH",
+            "status": "FAIL",
+            "evidence": "snmp-server community public RO"
+        },
+        {
+            "check": "Password encryption",
+            "severity": "MEDIUM",
+            "status": "FAIL",
+            "evidence": "service password-encryption not found"
+        },
+        {
+            "check": "Weak enable password",
+            "severity": "HIGH",
+            "status": "FAIL",
+            "evidence": "enable password cisco123"
+        },
+        {
+            "check": "SSH-only remote access",
+            "severity": "HIGH",
+            "status": "FAIL",
+            "evidence": "transport input telnet"
+        },
+        {
+            "check": "HTTP server disabled",
+            "severity": "PASS",
+            "status": "PASS",
+            "evidence": "no ip http server"
+        }
+    ],
+    "unknown_commands": [
+        "hostname EDGE-R1",
+        "line vty 0 4"
+    ]
+}
