@@ -1,3 +1,4 @@
 {
-    "no ip http server": "http_server_enabled"
+    "no ip http server": "http_server_enabled",
+    "web-management disable": "http_server_enabled"
 }
