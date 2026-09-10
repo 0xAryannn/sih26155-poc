@@ -1,0 +1,12 @@
+.venv
+.git
+__pycache__
+*.pyc
+node_modules
+Frontend/node_modules
+Frontend/dist
+.DS_Store
+*.pdf
+*.jpeg
+uploads/*
+benchmark_audit/results/*

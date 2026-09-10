@@ -1,0 +1,24 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend code
+COPY api_server.py .
+COPY auditor.py .
+COPY config_loader.py .
+COPY run_audit.py .
+COPY learned.json .
+COPY benchmark_audit/ benchmark_audit/
+COPY hitl/ hitl/
+COPY configs/ configs/
+
+# Create upload directory
+RUN mkdir -p uploads benchmark_audit/results
+
+EXPOSE 5001
+
+CMD ["python", "api_server.py"]
