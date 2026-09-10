@@ -1,0 +1,1519 @@
+{
+    "metadata": {
+        "version": "2.0.0",
+        "description": "Multi-vendor benchmark-sourced compliance rules for network device configuration auditing",
+        "supported_vendors": [
+            "cisco_ios",
+            "cisco_asa",
+            "juniper",
+            "paloalto",
+            "fortinet",
+            "arista",
+            "huawei",
+            "aruba"
+        ],
+        "sources": [
+            "CIS Benchmarks (cisecurity.org/cis-benchmarks)",
+            "NIST SP 800-53 Rev 5 (csrc.nist.gov/pubs/sp/800/53/r5)",
+            "DISA STIGs (public.cyber.mil/stigs/)",
+            "ISO/IEC 27001 (iso.org/isoiec-27001)",
+            "NCIIPC Guidelines (nciipc.gov.in)",
+            "Tenable Audit Files (tenable.com/audits)",
+            "NIST OSCAL (pages.nist.gov/OSCAL/)"
+        ],
+        "last_updated": "2026-09-10"
+    },
+    "rules": [
+        {
+            "id": "AUTH-001",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-IA-2",
+                "STIG-NDM"
+            ],
+            "command_pattern": "aaa new-model",
+            "vendor_patterns": {
+                "cisco_ios": "aaa new-model",
+                "cisco_asa": "aaa-server|aaa authentication",
+                "juniper": "set system authentication-order|set system (tacplus|radius)-server",
+                "paloalto": "set shared authentication-profile",
+                "fortinet": "config user radius|config user tacacs",
+                "arista": "aaa authentication login default",
+                "huawei": "^aaa$|authentication-mode"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Enable AAA new-model for centralized authentication, authorization, and accounting",
+            "remediation": "aaa new-model",
+            "weight": 5
+        },
+        {
+            "id": "AUTH-002",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-IA-2"
+            ],
+            "command_pattern": "aaa authentication (ssh|login|enable)",
+            "vendor_patterns": {
+                "cisco_ios": "aaa authentication (ssh|login|enable)",
+                "cisco_asa": "aaa authentication (ssh|login|enable|http)",
+                "juniper": "set system login user|set system authentication-order",
+                "paloalto": "set mgt-config users",
+                "fortinet": "config system admin",
+                "arista": "aaa authentication (login|enable)",
+                "huawei": "authentication-mode (aaa|radius|hwtacacs)"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "AAA authentication must be configured for SSH, login, or enable access",
+            "remediation": "aaa authentication login default local\naaa authentication ssh console LOCAL",
+            "weight": 5
+        },
+        {
+            "id": "AUTH-003",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AU-2"
+            ],
+            "command_pattern": "aaa authentication login-history",
+            "vendor_patterns": {
+                "cisco_ios": "aaa authentication login-history|login on-failure log|login on-success log",
+                "cisco_asa": "aaa authentication login-history",
+                "juniper": "set system login retry-options",
+                "paloalto": "set deviceconfig setting management failed-attempts",
+                "fortinet": "set admin-login-max",
+                "arista": "aaa authentication login-history",
+                "huawei": "login-record"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "AAA authentication login history should be enabled for audit trail",
+            "remediation": "aaa authentication login-history",
+            "weight": 3
+        },
+        {
+            "id": "AUTH-004",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "enable password",
+            "vendor_patterns": {
+                "cisco_ios": "enable password",
+                "cisco_asa": "enable password",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "enable password",
+                "huawei": null
+            },
+            "check_type": "absence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Cleartext 'enable password' should not be used; use 'enable secret' with strong hashing instead",
+            "remediation": "no enable password\nenable algorithm-type scrypt secret <strong-password>",
+            "weight": 5
+        },
+        {
+            "id": "AUTH-005",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-IA-5",
+                "STIG-NDM"
+            ],
+            "command_pattern": "service password-encryption",
+            "vendor_patterns": {
+                "cisco_ios": "service password-encryption",
+                "cisco_asa": "service password-encryption|password encryption aes",
+                "juniper": "set system login password (format|change-type|minimum-length|minimum-upper-cases|minimum-lower-cases|minimum-numerics|minimum-punctuations|minimum-changes)",
+                "paloalto": "set mgt-config password-complexity enabled yes",
+                "fortinet": "set private-data-encryption enable",
+                "arista": "service password-encryption",
+                "huawei": "set authentication password cipher"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Password encryption service must be enabled to protect stored passwords",
+            "remediation": "service password-encryption",
+            "weight": 5
+        },
+        {
+            "id": "AUTH-006",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-IA-5"
+            ],
+            "command_pattern": "username .+ password",
+            "vendor_patterns": {
+                "cisco_ios": "username .+ password",
+                "cisco_asa": "username .+ password",
+                "juniper": "set system login user .+ (authentication|class)",
+                "paloalto": "set mgt-config users .+ password",
+                "fortinet": "set password",
+                "arista": "username .+ (secret|password)",
+                "huawei": "local-user .+ password"
+            },
+            "check_type": "value_check",
+            "expected_value": {
+                "check": "password_strength",
+                "min_length": 8,
+                "reject_patterns": [
+                    "password",
+                    "admin",
+                    "cisco",
+                    "default",
+                    "123"
+                ]
+            },
+            "severity": "HIGH",
+            "description": "Local user accounts must use strong passwords (min 8 chars, not easily guessable)",
+            "remediation": "username <user> privilege 15 algorithm-type scrypt secret <strong-password>",
+            "weight": 5
+        },
+        {
+            "id": "AUTH-007",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "aaa accounting",
+            "vendor_patterns": {
+                "cisco_ios": "aaa accounting",
+                "cisco_asa": "aaa accounting",
+                "juniper": "set system syslog (file|host) .+ (change-log|any) info",
+                "paloalto": "set shared log-settings system",
+                "fortinet": "config log setting",
+                "arista": "aaa accounting",
+                "huawei": "aaa accounting-scheme"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "AAA accounting must be configured to log all administrative actions",
+            "remediation": "aaa accounting exec default start-stop group tacacs+\naaa accounting commands 15 default start-stop group tacacs+",
+            "weight": 3
+        },
+        {
+            "id": "AUTH-008",
+            "category": "Authentication",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-IA-2"
+            ],
+            "command_pattern": "aaa authorization",
+            "vendor_patterns": {
+                "cisco_ios": "aaa authorization",
+                "cisco_asa": "aaa authorization",
+                "juniper": "set system login class .+ (permissions|allow-commands|deny-commands)",
+                "paloalto": "set mgt-config users .+ permissions",
+                "fortinet": "set accprofile",
+                "arista": "aaa authorization",
+                "huawei": "aaa authorization-scheme"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "AAA authorization must be configured for command-level access control",
+            "remediation": "aaa authorization exec default local\naaa authorization commands 15 default local",
+            "weight": 3
+        },
+        {
+            "id": "ACCESS-001",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-17"
+            ],
+            "command_pattern": "transport input telnet",
+            "vendor_patterns": {
+                "cisco_ios": "transport input telnet",
+                "cisco_asa": "telnet .+ (inside|outside|management|dmz)",
+                "juniper": "set system services telnet",
+                "paloalto": "set deviceconfig system service disable-telnet no",
+                "fortinet": "set allowaccess .+telnet",
+                "arista": "transport input telnet",
+                "huawei": "telnet server enable"
+            },
+            "check_type": "absence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Telnet must be disabled on all VTY lines; use SSH only",
+            "remediation": "line vty 0 4\n transport input ssh",
+            "weight": 5
+        },
+        {
+            "id": "ACCESS-002",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-3"
+            ],
+            "command_pattern": "transport input ssh",
+            "vendor_patterns": {
+                "cisco_ios": "transport input ssh",
+                "cisco_asa": "ssh .+ (inside|outside|management|dmz)",
+                "juniper": "set system services ssh",
+                "paloalto": "set deviceconfig system service disable-ssh no|set deviceconfig system ssh",
+                "fortinet": "set allowaccess .+ssh",
+                "arista": "management ssh|transport input ssh",
+                "huawei": "stelnet server enable|ssh server"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "SSH must be configured as the only remote access method on VTY lines",
+            "remediation": "line vty 0 4\n transport input ssh",
+            "weight": 5
+        },
+        {
+            "id": "ACCESS-003",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-3"
+            ],
+            "command_pattern": "ssh .+ inside|ssh .+ outside|ssh .+ management",
+            "vendor_patterns": {
+                "cisco_ios": "access-class .+ in",
+                "cisco_asa": "ssh .+ (inside|outside|management|dmz)",
+                "juniper": "set firewall family inet filter|set system services ssh root-login deny",
+                "paloalto": "set deviceconfig system permitted-ip",
+                "fortinet": "set trusthost",
+                "arista": "management ssh|ip ssh source-interface",
+                "huawei": "ssh server acl"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "SSH access must be restricted to specific subnets/interfaces",
+            "remediation": "ssh <trusted-subnet> <mask> <interface>",
+            "weight": 4
+        },
+        {
+            "id": "ACCESS-004",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "STIG-NDM",
+                "NIST-IA-5"
+            ],
+            "command_pattern": "ssh stricthostkeycheck",
+            "vendor_patterns": {
+                "cisco_ios": "ip ssh stricthostkeycheck",
+                "cisco_asa": "ssh stricthostkeycheck",
+                "juniper": "set system services ssh hostkey-algorithm|set system services ssh macs",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "management ssh hostkey",
+                "huawei": "ssh server key-exchange"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "SSH strict host key checking should be enabled to prevent MITM attacks",
+            "remediation": "ssh stricthostkeycheck",
+            "weight": 3
+        },
+        {
+            "id": "ACCESS-005",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "ssh timeout",
+            "vendor_patterns": {
+                "cisco_ios": "ip ssh time-out",
+                "cisco_asa": "ssh timeout",
+                "juniper": "set system services ssh (connection-limit|max-sessions)|set system login (idle-timeout|class .+ idle-timeout)",
+                "paloalto": "set deviceconfig setting management idle-timeout",
+                "fortinet": "set admintimeout",
+                "arista": "management ssh idle-timeout",
+                "huawei": "ssh server timeout"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "SSH session timeout must be configured to prevent idle sessions",
+            "remediation": "ssh timeout 5",
+            "weight": 3
+        },
+        {
+            "id": "ACCESS-006",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-SC-13",
+                "STIG-NDM"
+            ],
+            "command_pattern": "ssh key-exchange group",
+            "vendor_patterns": {
+                "cisco_ios": "ip ssh (dh|key-exchange)",
+                "cisco_asa": "ssh key-exchange group",
+                "juniper": "set system services ssh (key-exchange|ciphers|macs)",
+                "paloalto": "set deviceconfig setting ssh key-exchange",
+                "fortinet": "set ssh-kex-algo",
+                "arista": "management ssh key-exchange",
+                "huawei": "ssh server key-exchange"
+            },
+            "check_type": "value_check",
+            "expected_value": {
+                "check": "not_in_list",
+                "reject_values": [
+                    "dh-group1-sha1",
+                    "dh-group5-sha1"
+                ]
+            },
+            "severity": "HIGH",
+            "description": "SSH key exchange must use strong groups (dh-group14-sha256 or higher); dh-group1-sha1 and dh-group5-sha1 are cryptographically weak",
+            "remediation": "ssh key-exchange group dh-group14-sha256",
+            "weight": 4
+        },
+        {
+            "id": "ACCESS-007",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-11"
+            ],
+            "command_pattern": "console timeout",
+            "vendor_patterns": {
+                "cisco_ios": "exec-timeout",
+                "cisco_asa": "console timeout",
+                "juniper": "set system login (idle-timeout|class .+ idle-timeout)",
+                "paloalto": "set deviceconfig setting management idle-timeout",
+                "fortinet": "set admintimeout",
+                "arista": "exec-timeout",
+                "huawei": "idle-timeout"
+            },
+            "check_type": "value_check",
+            "expected_value": {
+                "check": "non_zero",
+                "description": "Console timeout must be non-zero to auto-disconnect idle sessions"
+            },
+            "severity": "HIGH",
+            "description": "Console timeout must be set to a non-zero value to prevent unauthorized access from idle sessions",
+            "remediation": "console timeout 5",
+            "weight": 4
+        },
+        {
+            "id": "ACCESS-008",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "telnet timeout",
+            "vendor_patterns": {
+                "cisco_ios": "transport input telnet",
+                "cisco_asa": "telnet timeout",
+                "juniper": "set system services telnet",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "transport input telnet",
+                "huawei": "telnet server enable"
+            },
+            "check_type": "absence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Telnet timeout configuration suggests Telnet may be in use; Telnet should be completely disabled",
+            "remediation": "no telnet timeout\nclear configure telnet",
+            "weight": 4
+        },
+        {
+            "id": "ACCESS-009",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AC-3",
+                "STIG-NDM"
+            ],
+            "command_pattern": "access-class .+ in",
+            "vendor_patterns": {
+                "cisco_ios": "access-class .+ in",
+                "cisco_asa": "ssh .+ (inside|outside|management)",
+                "juniper": "set firewall family inet filter .+|set interfaces lo.+ filter input",
+                "paloalto": "set deviceconfig system permitted-ip",
+                "fortinet": "set trusthost",
+                "arista": "access-class .+ in",
+                "huawei": "acl .+ inbound"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "VTY lines should have access-class applied to restrict management access to trusted IPs",
+            "remediation": "access-list 10 permit <trusted-network> <wildcard>\nline vty 0 4\n access-class 10 in",
+            "weight": 3
+        },
+        {
+            "id": "ACCESS-010",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "exec-timeout",
+            "vendor_patterns": {
+                "cisco_ios": "exec-timeout",
+                "cisco_asa": "console timeout|ssh timeout",
+                "juniper": "set system login (idle-timeout|class .+ idle-timeout)",
+                "paloalto": "set deviceconfig setting management idle-timeout",
+                "fortinet": "set admintimeout",
+                "arista": "exec-timeout",
+                "huawei": "idle-timeout"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Exec timeout must be set on console and VTY lines to auto-disconnect idle sessions",
+            "remediation": "line con 0\n exec-timeout 5 0\nline vty 0 4\n exec-timeout 5 0",
+            "weight": 3
+        },
+        {
+            "id": "ACCESS-011",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-3"
+            ],
+            "command_pattern": "ip ssh version 2",
+            "vendor_patterns": {
+                "cisco_ios": "ip ssh version 2",
+                "cisco_asa": "ssh version 2",
+                "juniper": "set system services ssh protocol-version v2",
+                "paloalto": null,
+                "fortinet": "set admin-ssh-v1 disable",
+                "arista": "ip ssh version 2|management ssh",
+                "huawei": "ssh server version 2|stelnet server enable"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "SSH version 2 must be enforced; SSH version 1 has known vulnerabilities",
+            "remediation": "ip ssh version 2",
+            "weight": 5
+        },
+        {
+            "id": "SNMP-001",
+            "category": "SNMP",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-6"
+            ],
+            "command_pattern": "snmp-server community public",
+            "vendor_patterns": {
+                "cisco_ios": "snmp-server community public",
+                "cisco_asa": "snmp-server community public",
+                "juniper": "set snmp community public",
+                "paloalto": null,
+                "fortinet": "set community public",
+                "arista": "snmp-server community public",
+                "huawei": "snmp-agent community .+ public"
+            },
+            "check_type": "absence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Default SNMP community string 'public' must not be used",
+            "remediation": "no snmp-server community public",
+            "weight": 5
+        },
+        {
+            "id": "SNMP-002",
+            "category": "SNMP",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM",
+                "NIST-AC-6"
+            ],
+            "command_pattern": "snmp-server community private",
+            "vendor_patterns": {
+                "cisco_ios": "snmp-server community private",
+                "cisco_asa": "snmp-server community private",
+                "juniper": "set snmp community private",
+                "paloalto": null,
+                "fortinet": "set community private",
+                "arista": "snmp-server community private",
+                "huawei": "snmp-agent community .+ private"
+            },
+            "check_type": "absence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Default SNMP community string 'private' must not be used",
+            "remediation": "no snmp-server community private",
+            "weight": 5
+        },
+        {
+            "id": "SNMP-003",
+            "category": "SNMP",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-SC-8"
+            ],
+            "command_pattern": "snmp-server group .+ v3",
+            "vendor_patterns": {
+                "cisco_ios": "snmp-server (group|user) .+ v3",
+                "cisco_asa": "snmp-server (group|user) .+ v3",
+                "juniper": "set snmp v3 (usm|vacm|target)",
+                "paloalto": "set deviceconfig system snmp-setting access-setting version v3",
+                "fortinet": "config system snmp user",
+                "arista": "snmp-server (group|user) .+ v3",
+                "huawei": "snmp-agent usm-user v3"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "SNMPv3 should be configured for encrypted and authenticated SNMP communications",
+            "remediation": "snmp-server group <group-name> v3 priv",
+            "weight": 3
+        },
+        {
+            "id": "SNMP-004",
+            "category": "SNMP",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no snmp-server location",
+            "vendor_patterns": {
+                "cisco_ios": "no snmp-server location",
+                "cisco_asa": "no snmp-server location",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no snmp-server location",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "SNMP location should be cleared or set to a non-revealing value to avoid information disclosure",
+            "remediation": "no snmp-server location",
+            "weight": 1
+        },
+        {
+            "id": "SNMP-005",
+            "category": "SNMP",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no snmp-server contact",
+            "vendor_patterns": {
+                "cisco_ios": "no snmp-server contact",
+                "cisco_asa": "no snmp-server contact",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no snmp-server contact",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "SNMP contact should be cleared or set to a non-revealing value to avoid information disclosure",
+            "remediation": "no snmp-server contact",
+            "weight": 1
+        },
+        {
+            "id": "SVC-001",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no ip http server",
+            "vendor_patterns": {
+                "cisco_ios": "no ip http server",
+                "cisco_asa": "no http server enable",
+                "juniper": "delete system services web-management",
+                "paloalto": null,
+                "fortinet": "set admin-https-redirect disable",
+                "arista": "no ip http server|management api http-commands.*no protocol http",
+                "huawei": "undo web-manager enable|undo http server enable"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "HTTP server must be disabled to prevent unencrypted management access",
+            "remediation": "no ip http server",
+            "weight": 4
+        },
+        {
+            "id": "SVC-002",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no ip http secure-server",
+            "vendor_patterns": {
+                "cisco_ios": "no ip http secure-server",
+                "cisco_asa": "no http server enable",
+                "juniper": "delete system services web-management https",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no management api http-commands",
+                "huawei": "undo http secure-server enable"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "HTTPS server should be disabled unless explicitly required for device management",
+            "remediation": "no ip http secure-server",
+            "weight": 3
+        },
+        {
+            "id": "SVC-003",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no cdp run|no cdp enable",
+            "vendor_patterns": {
+                "cisco_ios": "no cdp (run|enable)",
+                "cisco_asa": "no cdp (run|enable)",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no (cdp|lldp) run",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "CDP should be disabled globally or on untrusted interfaces to prevent information disclosure",
+            "remediation": "no cdp run",
+            "weight": 3
+        },
+        {
+            "id": "SVC-004",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "no lldp run",
+            "vendor_patterns": {
+                "cisco_ios": "no lldp run",
+                "cisco_asa": null,
+                "juniper": "delete protocols lldp",
+                "paloalto": null,
+                "fortinet": "set lldp-reception disable|set lldp-transmission disable",
+                "arista": "no lldp run",
+                "huawei": "undo lldp enable"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "LLDP should be disabled to prevent network topology disclosure",
+            "remediation": "no lldp run",
+            "weight": 2
+        },
+        {
+            "id": "SVC-005",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no ip source-route",
+            "vendor_patterns": {
+                "cisco_ios": "no ip source-route",
+                "cisco_asa": null,
+                "juniper": "set firewall filter .+ source-routing",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no ip source-route",
+                "huawei": "undo ip source-route enable"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "IP source routing must be disabled to prevent routing manipulation attacks",
+            "remediation": "no ip source-route",
+            "weight": 4
+        },
+        {
+            "id": "SVC-006",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no ip directed-broadcast",
+            "vendor_patterns": {
+                "cisco_ios": "no ip directed-broadcast",
+                "cisco_asa": null,
+                "juniper": "set interfaces .+ no-directed-broadcast",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no ip directed-broadcast",
+                "huawei": "undo ip forward-broadcast"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "IP directed broadcasts must be disabled to prevent smurf amplification attacks",
+            "remediation": "no ip directed-broadcast",
+            "weight": 4
+        },
+        {
+            "id": "SVC-007",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no ip finger|no service finger",
+            "vendor_patterns": {
+                "cisco_ios": "no (ip finger|service finger)",
+                "cisco_asa": null,
+                "juniper": "delete system services finger",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no (ip finger|service finger)",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Finger service must be disabled to prevent user enumeration",
+            "remediation": "no service finger",
+            "weight": 2
+        },
+        {
+            "id": "SVC-008",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "no ip bootp server",
+            "vendor_patterns": {
+                "cisco_ios": "no ip bootp server",
+                "cisco_asa": null,
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no ip bootp server",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "BOOTP server must be disabled to prevent unauthorized network booting",
+            "remediation": "no ip bootp server",
+            "weight": 2
+        },
+        {
+            "id": "SVC-009",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no ip proxy-arp",
+            "vendor_patterns": {
+                "cisco_ios": "no ip proxy-arp",
+                "cisco_asa": null,
+                "juniper": "set interfaces .+ no-proxy-arp",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "no ip proxy-arp",
+                "huawei": "undo arp proxy"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Proxy ARP must be disabled to prevent traffic interception",
+            "remediation": "no ip proxy-arp",
+            "weight": 3
+        },
+        {
+            "id": "SVC-010",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "service tcp-keepalives-in",
+            "vendor_patterns": {
+                "cisco_ios": "service tcp-keepalives-in",
+                "cisco_asa": null,
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "service tcp-keepalives-in",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "TCP keepalives (inbound) should be enabled to clean up dead sessions",
+            "remediation": "service tcp-keepalives-in",
+            "weight": 2
+        },
+        {
+            "id": "SVC-011",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "service tcp-keepalives-out",
+            "vendor_patterns": {
+                "cisco_ios": "service tcp-keepalives-out",
+                "cisco_asa": null,
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "service tcp-keepalives-out",
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "TCP keepalives (outbound) should be enabled to clean up dead sessions",
+            "remediation": "service tcp-keepalives-out",
+            "weight": 2
+        },
+        {
+            "id": "SVC-012",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "ftp mode passive",
+            "vendor_patterns": {
+                "cisco_ios": "ftp mode passive|ip ftp passive",
+                "cisco_asa": "ftp mode passive",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "FTP passive mode should be configured for secure file transfers",
+            "remediation": "ftp mode passive",
+            "weight": 1
+        },
+        {
+            "id": "SVC-013",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "no asdm history enable",
+            "vendor_patterns": {
+                "cisco_ios": null,
+                "cisco_asa": "no asdm history enable",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "ASDM history should be disabled if ASDM is not in active use",
+            "remediation": "no asdm history enable",
+            "weight": 1
+        },
+        {
+            "id": "SVC-014",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "no call-home reporting anonymous|no active",
+            "vendor_patterns": {
+                "cisco_ios": "no call-home|no service call-home",
+                "cisco_asa": "no call-home reporting anonymous|no active",
+                "juniper": "delete system phone-home",
+                "paloalto": null,
+                "fortinet": "set auto-join-forticloud disable",
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Call-home and anonymous reporting should be disabled to prevent information disclosure",
+            "remediation": "no call-home reporting anonymous\ncall-home\n profile CiscoTAC-1\n  no active",
+            "weight": 2
+        },
+        {
+            "id": "SVC-015",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "icmp unreachable rate-limit",
+            "vendor_patterns": {
+                "cisco_ios": "ip icmp rate-limit unreachable",
+                "cisco_asa": "icmp unreachable rate-limit",
+                "juniper": "set system internet-options icmpv4-rate-limit",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "ICMP unreachable messages should be rate-limited to mitigate reconnaissance",
+            "remediation": "icmp unreachable rate-limit 1 burst-size 1",
+            "weight": 1
+        },
+        {
+            "id": "SVC-016",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "arp rate-limit",
+            "vendor_patterns": {
+                "cisco_ios": "ip arp inspection",
+                "cisco_asa": "arp rate-limit",
+                "juniper": "set interfaces .+ arp-resp",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "ip arp inspection",
+                "huawei": "arp speed-limit"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "ARP rate limiting should be configured to mitigate ARP flooding attacks",
+            "remediation": "arp rate-limit 16384",
+            "weight": 1
+        },
+        {
+            "id": "SVC-017",
+            "category": "Services",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "no arp permit-nonconnected",
+            "vendor_patterns": {
+                "cisco_ios": null,
+                "cisco_asa": "no arp permit-nonconnected",
+                "juniper": null,
+                "paloalto": null,
+                "fortinet": null,
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Non-connected ARP entries should be denied to prevent ARP spoofing",
+            "remediation": "no arp permit-nonconnected",
+            "weight": 2
+        },
+        {
+            "id": "LOG-001",
+            "category": "Logging",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AU-3",
+                "ISO-A.12.4"
+            ],
+            "command_pattern": "logging host",
+            "vendor_patterns": {
+                "cisco_ios": "logging host",
+                "cisco_asa": "logging host",
+                "juniper": "set system syslog host",
+                "paloalto": "set shared log-settings syslog",
+                "fortinet": "config log syslogd setting|set server",
+                "arista": "logging host",
+                "huawei": "info-center loghost"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "Syslog server must be configured for centralized log collection and analysis",
+            "remediation": "logging host <syslog-server-ip>",
+            "weight": 5
+        },
+        {
+            "id": "LOG-002",
+            "category": "Logging",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AU-3"
+            ],
+            "command_pattern": "logging buffered",
+            "vendor_patterns": {
+                "cisco_ios": "logging buffered",
+                "cisco_asa": "logging buffered",
+                "juniper": "set system syslog file",
+                "paloalto": "set deviceconfig setting logging",
+                "fortinet": "config log memory setting|set status enable",
+                "arista": "logging buffered",
+                "huawei": "info-center logbuffer"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Local logging buffer must be configured for on-device log retention",
+            "remediation": "logging buffered informational",
+            "weight": 3
+        },
+        {
+            "id": "LOG-003",
+            "category": "Logging",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AU-8",
+                "ISO-A.12.4"
+            ],
+            "command_pattern": "service timestamps log datetime",
+            "vendor_patterns": {
+                "cisco_ios": "service timestamps (log|debug) datetime",
+                "cisco_asa": "logging timestamp",
+                "juniper": "set system syslog time-format|set system time-zone",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "service timestamps log datetime",
+                "huawei": "info-center timestamp"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Log messages must include timestamps with date/time for accurate forensic analysis",
+            "remediation": "service timestamps log datetime msec localtime show-timezone",
+            "weight": 3
+        },
+        {
+            "id": "LOG-004",
+            "category": "Logging",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AU-3"
+            ],
+            "command_pattern": "logging trap",
+            "vendor_patterns": {
+                "cisco_ios": "logging trap",
+                "cisco_asa": "logging trap",
+                "juniper": "set system syslog (file|host) .+ any (info|notice|warning)",
+                "paloalto": "set shared log-settings syslog .+ severity",
+                "fortinet": "set severity",
+                "arista": "logging trap",
+                "huawei": "info-center source .+ channel"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Logging trap level should be configured for appropriate syslog message filtering",
+            "remediation": "logging trap informational",
+            "weight": 2
+        },
+        {
+            "id": "CRYPTO-001",
+            "category": "Crypto",
+            "benchmark_sources": [
+                "NIST-SC-13",
+                "STIG-NDM"
+            ],
+            "command_pattern": "crypto ipsec security-association pmtu-aging",
+            "vendor_patterns": {
+                "cisco_ios": "crypto ipsec security-association",
+                "cisco_asa": "crypto ipsec security-association pmtu-aging",
+                "juniper": "set security ipsec",
+                "paloalto": "set network ike crypto-profiles ipsec",
+                "fortinet": "config vpn ipsec phase2",
+                "arista": null,
+                "huawei": "ipsec sa"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "IPsec SA PMTU aging should be configured for proper tunnel maintenance",
+            "remediation": "crypto ipsec security-association pmtu-aging infinite",
+            "weight": 2
+        },
+        {
+            "id": "CRYPTO-002",
+            "category": "Crypto",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-SC-12"
+            ],
+            "command_pattern": "crypto ca trustpool policy",
+            "vendor_patterns": {
+                "cisco_ios": "crypto pki trustpoint|crypto ca trustpool",
+                "cisco_asa": "crypto ca trustpool policy|crypto ca trustpoint",
+                "juniper": "set security pki ca-profile",
+                "paloalto": "set shared certificate-profile",
+                "fortinet": "config certificate ca",
+                "arista": "management security ssl profile",
+                "huawei": "pki entity|pki realm"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "CA trustpool policy should be configured for certificate validation",
+            "remediation": "crypto ca trustpool policy",
+            "weight": 2
+        },
+        {
+            "id": "CRYPTO-003",
+            "category": "Crypto",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-SC-13",
+                "STIG-NDM"
+            ],
+            "command_pattern": "crypto key generate rsa",
+            "vendor_patterns": {
+                "cisco_ios": "crypto key generate rsa",
+                "cisco_asa": "crypto key generate rsa",
+                "juniper": "set system services ssh (hostkey-algorithm|ciphers|macs)",
+                "paloalto": null,
+                "fortinet": null,
+                "arista": "crypto key generate rsa",
+                "huawei": "rsa local-key-pair create"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "RSA keys must be generated with a minimum modulus of 2048 bits for SSH",
+            "remediation": "crypto key generate rsa modulus 2048",
+            "weight": 4
+        },
+        {
+            "id": "MGMT-001",
+            "category": "Management",
+            "benchmark_sources": [
+                "STIG-NDM",
+                "CIS"
+            ],
+            "command_pattern": "banner login",
+            "vendor_patterns": {
+                "cisco_ios": "banner login",
+                "cisco_asa": "banner login",
+                "juniper": "set system login message",
+                "paloalto": "set deviceconfig system login-banner",
+                "fortinet": "set pre-login-banner enable",
+                "arista": "banner login",
+                "huawei": "header login"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Login banner must be configured to display legal/warning notice before authentication",
+            "remediation": "banner login @\nAuthorized access only. All activity is monitored and recorded.\n@",
+            "weight": 3
+        },
+        {
+            "id": "MGMT-002",
+            "category": "Management",
+            "benchmark_sources": [
+                "STIG-NDM"
+            ],
+            "command_pattern": "banner motd",
+            "vendor_patterns": {
+                "cisco_ios": "banner motd",
+                "cisco_asa": "banner motd",
+                "juniper": "set system login announcement",
+                "paloalto": null,
+                "fortinet": "set post-login-banner enable",
+                "arista": "banner motd",
+                "huawei": "header shell"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "MOTD banner should be configured to display operational warnings",
+            "remediation": "banner motd @\nWARNING: Unauthorized access is prohibited.\n@",
+            "weight": 2
+        },
+        {
+            "id": "MGMT-003",
+            "category": "Management",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "hostname",
+            "vendor_patterns": {
+                "cisco_ios": "hostname",
+                "cisco_asa": "hostname",
+                "juniper": "set system host-name",
+                "paloalto": "set deviceconfig system hostname",
+                "fortinet": "set hostname",
+                "arista": "hostname",
+                "huawei": "sysname"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "Hostname must be set for device identification in logs and management",
+            "remediation": "hostname <device-name>",
+            "weight": 1
+        },
+        {
+            "id": "THREAT-001",
+            "category": "Threat Detection",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "threat-detection basic-threat",
+            "vendor_patterns": {
+                "cisco_ios": "ip inspect|zone-member security",
+                "cisco_asa": "threat-detection basic-threat",
+                "juniper": "set security idp|set security screen",
+                "paloalto": "set profiles vulnerability",
+                "fortinet": "config ips sensor",
+                "arista": null,
+                "huawei": "anti-ddos"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Basic threat detection must be enabled to identify common attack patterns",
+            "remediation": "threat-detection basic-threat",
+            "weight": 3
+        },
+        {
+            "id": "THREAT-002",
+            "category": "Threat Detection",
+            "benchmark_sources": [
+                "CIS"
+            ],
+            "command_pattern": "threat-detection statistics access-list",
+            "vendor_patterns": {
+                "cisco_ios": null,
+                "cisco_asa": "threat-detection statistics access-list",
+                "juniper": "set security screen",
+                "paloalto": "set profiles vulnerability",
+                "fortinet": null,
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "Threat detection ACL statistics should be enabled for monitoring denied traffic patterns",
+            "remediation": "threat-detection statistics access-list",
+            "weight": 2
+        },
+        {
+            "id": "THREAT-003",
+            "category": "Threat Detection",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "threat-detection statistics tcp-intercept",
+            "vendor_patterns": {
+                "cisco_ios": "ip tcp intercept",
+                "cisco_asa": "threat-detection statistics tcp-intercept",
+                "juniper": "set security screen ids-option .+ tcp syn-flood",
+                "paloalto": "set profiles flood-protection",
+                "fortinet": "set tcp-session-without-syn block",
+                "arista": null,
+                "huawei": "anti-ddos tcp-fragment"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "TCP intercept statistics should be enabled for SYN flood detection",
+            "remediation": "threat-detection statistics tcp-intercept",
+            "weight": 3
+        },
+        {
+            "id": "INTF-001",
+            "category": "Interface",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "shutdown",
+            "vendor_patterns": {
+                "cisco_ios": "shutdown",
+                "cisco_asa": "shutdown",
+                "juniper": "set interfaces .+ disable",
+                "paloalto": "set network interface .+ link-state down",
+                "fortinet": "set status down",
+                "arista": "shutdown",
+                "huawei": "shutdown"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Unused interfaces should be administratively shut down to reduce attack surface",
+            "remediation": "interface <interface-id>\n shutdown",
+            "weight": 2
+        },
+        {
+            "id": "INTF-002",
+            "category": "Interface",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "management-only",
+            "vendor_patterns": {
+                "cisco_ios": "management-plane|management interface",
+                "cisco_asa": "management-only",
+                "juniper": "set interfaces .+ unit .+ family inet filter",
+                "paloalto": "set network interface .+ interface-management-profile",
+                "fortinet": "set allowaccess",
+                "arista": "management api|management ssh",
+                "huawei": "management-plane"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "Management interface should be restricted to management traffic only",
+            "remediation": "interface Management1/1\n management-only",
+            "weight": 2
+        },
+        {
+            "id": "NTP-001",
+            "category": "NTP",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AU-8"
+            ],
+            "command_pattern": "ntp server",
+            "vendor_patterns": {
+                "cisco_ios": "ntp server",
+                "cisco_asa": "ntp server",
+                "juniper": "set system ntp server",
+                "paloalto": "set deviceconfig system ntp-servers primary-ntp-server",
+                "fortinet": "config system ntp|set ntpsync enable|set server",
+                "arista": "ntp server",
+                "huawei": "ntp-service unicast-server"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "HIGH",
+            "description": "NTP server must be configured for accurate time synchronization across all log sources",
+            "remediation": "ntp server <ntp-server-ip>",
+            "weight": 4
+        },
+        {
+            "id": "NTP-002",
+            "category": "NTP",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-AU-8"
+            ],
+            "command_pattern": "ntp authenticate",
+            "vendor_patterns": {
+                "cisco_ios": "ntp authenticate",
+                "cisco_asa": "ntp authenticate",
+                "juniper": "set system ntp (authentication-key|trusted-key)",
+                "paloalto": "set deviceconfig system ntp-servers .+ authentication-type",
+                "fortinet": "set authentication enable",
+                "arista": "ntp authenticate",
+                "huawei": "ntp-service authentication enable"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "NTP authentication must be enabled to prevent time-source spoofing",
+            "remediation": "ntp authenticate\nntp authentication-key 1 md5 <key>\nntp trusted-key 1",
+            "weight": 3
+        },
+        {
+            "id": "ROUTE-001",
+            "category": "Routing",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-SC-8"
+            ],
+            "command_pattern": "ip ospf authentication",
+            "vendor_patterns": {
+                "cisco_ios": "ip ospf authentication|area .+ authentication",
+                "cisco_asa": "ospf authentication|area .+ authentication",
+                "juniper": "set protocols ospf area .+ (authentication|interface .+ authentication)",
+                "paloalto": "set network virtual-router .+ protocol ospf auth-profile",
+                "fortinet": "config router ospf|set authentication",
+                "arista": "ip ospf authentication",
+                "huawei": "ospf authentication-mode"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "OSPF authentication must be enabled to prevent unauthorized route injection",
+            "remediation": "interface <interface>\n ip ospf authentication message-digest\n ip ospf message-digest-key 1 md5 <key>",
+            "weight": 3
+        },
+        {
+            "id": "ROUTE-002",
+            "category": "Routing",
+            "benchmark_sources": [
+                "CIS",
+                "NIST-SC-8"
+            ],
+            "command_pattern": "neighbor .+ password",
+            "vendor_patterns": {
+                "cisco_ios": "neighbor .+ password",
+                "cisco_asa": "neighbor .+ password",
+                "juniper": "set protocols bgp group .+ (authentication-key|peer-as)",
+                "paloalto": "set network virtual-router .+ protocol bgp .+ auth-profile",
+                "fortinet": "config router bgp|set password",
+                "arista": "neighbor .+ password",
+                "huawei": "peer .+ password"
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "MEDIUM",
+            "description": "BGP neighbor authentication must be configured to prevent unauthorized peering",
+            "remediation": "router bgp <as-number>\n neighbor <ip> password <key>",
+            "weight": 3
+        },
+        {
+            "id": "DAP-001",
+            "category": "Access Control",
+            "benchmark_sources": [
+                "CIS",
+                "STIG-NDM"
+            ],
+            "command_pattern": "dynamic-access-policy-record",
+            "vendor_patterns": {
+                "cisco_ios": null,
+                "cisco_asa": "dynamic-access-policy-record",
+                "juniper": "set access profile",
+                "paloalto": "set network tunnel global-protect",
+                "fortinet": "config vpn ssl settings",
+                "arista": null,
+                "huawei": null
+            },
+            "check_type": "presence",
+            "expected_value": null,
+            "severity": "LOW",
+            "description": "Dynamic access policy should be configured for VPN access control",
+            "remediation": "dynamic-access-policy-record DfltAccessPolicy",
+            "weight": 1
+        }
+    ]
+}

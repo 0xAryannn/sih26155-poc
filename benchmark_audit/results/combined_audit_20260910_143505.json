@@ -1,0 +1,2740 @@
+{
+    "report_type": "combined_benchmark_audit",
+    "generated_at": "2026-09-10T14:35:05.430844",
+    "total_devices": 3,
+    "summary": {
+        "total_passed": 79,
+        "total_failed": 104,
+        "total_unknown": 9,
+        "total_score": 255,
+        "total_max_score": 552
+    },
+    "devices": [
+        {
+            "device_name": "ASA.txt",
+            "config_file": "ASA.txt",
+            "detected_vendor": "cisco_asa",
+            "total_rules": 61,
+            "passed_rules": [
+                {
+                    "rule_id": "AUTH-001",
+                    "category": "Authentication",
+                    "description": "Enable AAA new-model for centralized authentication, authorization, and accounting",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-IA-2",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 80: aaa authentication ssh console LOCAL | Line 81: aaa authentication login-history",
+                    "remediation": "aaa new-model",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-002",
+                    "category": "Authentication",
+                    "description": "AAA authentication must be configured for SSH, login, or enable access",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-2"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 80: aaa authentication ssh console LOCAL | Line 81: aaa authentication login-history",
+                    "remediation": "aaa authentication login default local\naaa authentication ssh console LOCAL",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-003",
+                    "category": "Authentication",
+                    "description": "AAA authentication login history should be enabled for audit trail",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AU-2"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 81: aaa authentication login-history",
+                    "remediation": "aaa authentication login-history",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "AUTH-006",
+                    "category": "Authentication",
+                    "description": "Local user accounts must use strong passwords (min 8 chars, not easily guessable)",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-5"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 97: username Marcraft privilege 15 password Marcraft1",
+                    "remediation": "username <user> privilege 15 algorithm-type scrypt secret <strong-password>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-001",
+                    "category": "Access Control",
+                    "description": "Telnet must be disabled on all VTY lines; use SSH only",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-17"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "line vty 0 4\n transport input ssh",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-002",
+                    "category": "Access Control",
+                    "description": "SSH must be configured as the only remote access method on VTY lines",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 89: ssh 192.168.5.0 255.255.255.0 inside",
+                    "remediation": "line vty 0 4\n transport input ssh",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-003",
+                    "category": "Access Control",
+                    "description": "SSH access must be restricted to specific subnets/interfaces",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 89: ssh 192.168.5.0 255.255.255.0 inside",
+                    "remediation": "ssh <trusted-subnet> <mask> <interface>",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-004",
+                    "category": "Access Control",
+                    "description": "SSH strict host key checking should be enabled to prevent MITM attacks",
+                    "benchmark_sources": [
+                        "STIG-NDM",
+                        "NIST-IA-5"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 88: ssh stricthostkeycheck",
+                    "remediation": "ssh stricthostkeycheck",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-005",
+                    "category": "Access Control",
+                    "description": "SSH session timeout must be configured to prevent idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 90: ssh timeout 15",
+                    "remediation": "ssh timeout 5",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-009",
+                    "category": "Access Control",
+                    "description": "VTY lines should have access-class applied to restrict management access to trusted IPs",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AC-3",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 89: ssh 192.168.5.0 255.255.255.0 inside",
+                    "remediation": "access-list 10 permit <trusted-network> <wildcard>\nline vty 0 4\n access-class 10 in",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-010",
+                    "category": "Access Control",
+                    "description": "Exec timeout must be set on console and VTY lines to auto-disconnect idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 90: ssh timeout 15 | Line 92: console timeout 0",
+                    "remediation": "line con 0\n exec-timeout 5 0\nline vty 0 4\n exec-timeout 5 0",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SNMP-001",
+                    "category": "SNMP",
+                    "description": "Default SNMP community string 'public' must not be used",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-6"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no snmp-server community public",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-002",
+                    "category": "SNMP",
+                    "description": "Default SNMP community string 'private' must not be used",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-6"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no snmp-server community private",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-004",
+                    "category": "SNMP",
+                    "description": "SNMP location should be cleared or set to a non-revealing value to avoid information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 82: no snmp-server location",
+                    "remediation": "no snmp-server location",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SNMP-005",
+                    "category": "SNMP",
+                    "description": "SNMP contact should be cleared or set to a non-revealing value to avoid information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 83: no snmp-server contact",
+                    "remediation": "no snmp-server contact",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-012",
+                    "category": "Services",
+                    "description": "FTP passive mode should be configured for secure file transfers",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 61: ftp mode passive",
+                    "remediation": "ftp mode passive",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-013",
+                    "category": "Services",
+                    "description": "ASDM history should be disabled if ASDM is not in active use",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 65: no asdm history enable",
+                    "remediation": "no asdm history enable",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-014",
+                    "category": "Services",
+                    "description": "Call-home and anonymous reporting should be disabled to prevent information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 101: no call-home reporting anonymous | Line 104: no active",
+                    "remediation": "no call-home reporting anonymous\ncall-home\n profile CiscoTAC-1\n  no active",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-015",
+                    "category": "Services",
+                    "description": "ICMP unreachable messages should be rate-limited to mitigate reconnaissance",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 64: icmp unreachable rate-limit 1 burst-size 1",
+                    "remediation": "icmp unreachable rate-limit 1 burst-size 1",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-016",
+                    "category": "Services",
+                    "description": "ARP rate limiting should be configured to mitigate ARP flooding attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 68: arp rate-limit 16384",
+                    "remediation": "arp rate-limit 16384",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-017",
+                    "category": "Services",
+                    "description": "Non-connected ARP entries should be denied to prevent ARP spoofing",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 67: no arp permit-nonconnected",
+                    "remediation": "no arp permit-nonconnected",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-001",
+                    "category": "Crypto",
+                    "description": "IPsec SA PMTU aging should be configured for proper tunnel maintenance",
+                    "benchmark_sources": [
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 85: crypto ipsec security-association pmtu-aging infinite",
+                    "remediation": "crypto ipsec security-association pmtu-aging infinite",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-002",
+                    "category": "Crypto",
+                    "description": "CA trustpool policy should be configured for certificate validation",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-12"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 86: crypto ca trustpool policy",
+                    "remediation": "crypto ca trustpool policy",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "MGMT-003",
+                    "category": "Management",
+                    "description": "Hostname must be set for device identification in logs and management",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 3: hostname ciscoasa | Line 100: prompt hostname context",
+                    "remediation": "hostname <device-name>",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "THREAT-001",
+                    "category": "Threat Detection",
+                    "description": "Basic threat detection must be enabled to identify common attack patterns",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 93: threat-detection basic-threat",
+                    "remediation": "threat-detection basic-threat",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "THREAT-002",
+                    "category": "Threat Detection",
+                    "description": "Threat detection ACL statistics should be enabled for monitoring denied traffic patterns",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 94: threat-detection statistics access-list",
+                    "remediation": "threat-detection statistics access-list",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "THREAT-003",
+                    "category": "Threat Detection",
+                    "description": "TCP intercept statistics should be enabled for SYN flood detection",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 95: no threat-detection statistics tcp-intercept",
+                    "remediation": "threat-detection statistics tcp-intercept",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "INTF-001",
+                    "category": "Interface",
+                    "description": "Unused interfaces should be administratively shut down to reduce attack surface",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 13: shutdown | Line 19: shutdown | Line 25: shutdown",
+                    "remediation": "interface <interface-id>\n shutdown",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "INTF-002",
+                    "category": "Interface",
+                    "description": "Management interface should be restricted to management traffic only",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 55: management-only",
+                    "remediation": "interface Management1/1\n management-only",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "DAP-001",
+                    "category": "Access Control",
+                    "description": "Dynamic access policy should be configured for VPN access control",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 96: dynamic-access-policy-record DfltAccessPolicy",
+                    "remediation": "dynamic-access-policy-record DfltAccessPolicy",
+                    "weight": 1
+                }
+            ],
+            "failed_rules": [
+                {
+                    "rule_id": "AUTH-004",
+                    "category": "Authentication",
+                    "description": "Cleartext 'enable password' should not be used; use 'enable secret' with strong hashing instead",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "VIOLATION FOUND \u2014 Line 4: enable password Marcraft1",
+                    "remediation": "no enable password\nenable algorithm-type scrypt secret <strong-password>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-005",
+                    "category": "Authentication",
+                    "description": "Password encryption service must be enabled to protect stored passwords",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-IA-5",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service password-encryption",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-007",
+                    "category": "Authentication",
+                    "description": "AAA accounting must be configured to log all administrative actions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa accounting exec default start-stop group tacacs+\naaa accounting commands 15 default start-stop group tacacs+",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "AUTH-008",
+                    "category": "Authentication",
+                    "description": "AAA authorization must be configured for command-level access control",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-2"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa authorization exec default local\naaa authorization commands 15 default local",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-006",
+                    "category": "Access Control",
+                    "description": "SSH key exchange must use strong groups (dh-group14-sha256 or higher); dh-group1-sha1 and dh-group5-sha1 are cryptographically weak",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "VIOLATION \u2014 Line 91: ssh key-exchange group dh-group1-sha1",
+                    "remediation": "ssh key-exchange group dh-group14-sha256",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-007",
+                    "category": "Access Control",
+                    "description": "Console timeout must be set to a non-zero value to prevent unauthorized access from idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-11"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "VIOLATION \u2014 Line 92: console timeout 0",
+                    "remediation": "console timeout 5",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-008",
+                    "category": "Access Control",
+                    "description": "Telnet timeout configuration suggests Telnet may be in use; Telnet should be completely disabled",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "VIOLATION FOUND \u2014 Line 87: telnet timeout 5",
+                    "remediation": "no telnet timeout\nclear configure telnet",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-011",
+                    "category": "Access Control",
+                    "description": "SSH version 2 must be enforced; SSH version 1 has known vulnerabilities",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ip ssh version 2",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-003",
+                    "category": "SNMP",
+                    "description": "SNMPv3 should be configured for encrypted and authenticated SNMP communications",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "snmp-server group <group-name> v3 priv",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-001",
+                    "category": "Services",
+                    "description": "HTTP server must be disabled to prevent unencrypted management access",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip http server",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-002",
+                    "category": "Services",
+                    "description": "HTTPS server should be disabled unless explicitly required for device management",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip http secure-server",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-003",
+                    "category": "Services",
+                    "description": "CDP should be disabled globally or on untrusted interfaces to prevent information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no cdp run",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-004",
+                    "category": "Services",
+                    "description": "LLDP should be disabled to prevent network topology disclosure",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no lldp run",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-005",
+                    "category": "Services",
+                    "description": "IP source routing must be disabled to prevent routing manipulation attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip source-route",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-006",
+                    "category": "Services",
+                    "description": "IP directed broadcasts must be disabled to prevent smurf amplification attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip directed-broadcast",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-007",
+                    "category": "Services",
+                    "description": "Finger service must be disabled to prevent user enumeration",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no service finger",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-008",
+                    "category": "Services",
+                    "description": "BOOTP server must be disabled to prevent unauthorized network booting",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip bootp server",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-009",
+                    "category": "Services",
+                    "description": "Proxy ARP must be disabled to prevent traffic interception",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip proxy-arp",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-010",
+                    "category": "Services",
+                    "description": "TCP keepalives (inbound) should be enabled to clean up dead sessions",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service tcp-keepalives-in",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-011",
+                    "category": "Services",
+                    "description": "TCP keepalives (outbound) should be enabled to clean up dead sessions",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service tcp-keepalives-out",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "LOG-001",
+                    "category": "Logging",
+                    "description": "Syslog server must be configured for centralized log collection and analysis",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3",
+                        "ISO-A.12.4"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "logging host <syslog-server-ip>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "LOG-002",
+                    "category": "Logging",
+                    "description": "Local logging buffer must be configured for on-device log retention",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "logging buffered informational",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-003",
+                    "category": "Logging",
+                    "description": "Log messages must include timestamps with date/time for accurate forensic analysis",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8",
+                        "ISO-A.12.4"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service timestamps log datetime msec localtime show-timezone",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-004",
+                    "category": "Logging",
+                    "description": "Logging trap level should be configured for appropriate syslog message filtering",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "logging trap informational",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-003",
+                    "category": "Crypto",
+                    "description": "RSA keys must be generated with a minimum modulus of 2048 bits for SSH",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "crypto key generate rsa modulus 2048",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "MGMT-001",
+                    "category": "Management",
+                    "description": "Login banner must be configured to display legal/warning notice before authentication",
+                    "benchmark_sources": [
+                        "STIG-NDM",
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "banner login @\nAuthorized access only. All activity is monitored and recorded.\n@",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "MGMT-002",
+                    "category": "Management",
+                    "description": "MOTD banner should be configured to display operational warnings",
+                    "benchmark_sources": [
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "banner motd @\nWARNING: Unauthorized access is prohibited.\n@",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "NTP-001",
+                    "category": "NTP",
+                    "description": "NTP server must be configured for accurate time synchronization across all log sources",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ntp server <ntp-server-ip>",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "NTP-002",
+                    "category": "NTP",
+                    "description": "NTP authentication must be enabled to prevent time-source spoofing",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ntp authenticate\nntp authentication-key 1 md5 <key>\nntp trusted-key 1",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ROUTE-001",
+                    "category": "Routing",
+                    "description": "OSPF authentication must be enabled to prevent unauthorized route injection",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "interface <interface>\n ip ospf authentication message-digest\n ip ospf message-digest-key 1 md5 <key>",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ROUTE-002",
+                    "category": "Routing",
+                    "description": "BGP neighbor authentication must be configured to prevent unauthorized peering",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "router bgp <as-number>\n neighbor <ip> password <key>",
+                    "weight": 3
+                }
+            ],
+            "unknown_commands": [
+                {
+                    "line_number": 66,
+                    "command": "arp timeout 14400",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 84,
+                    "command": "service sw-reset-button",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                }
+            ],
+            "security_score": 82,
+            "max_score": 184,
+            "risk_level": "HIGH",
+            "benchmark_coverage": {
+                "CIS": 58,
+                "NIST-IA-2": 3,
+                "STIG-NDM": 42,
+                "NIST-AU-2": 1,
+                "NIST-IA-5": 3,
+                "NIST-AC-17": 1,
+                "NIST-AC-3": 4,
+                "NIST-SC-13": 3,
+                "NIST-AC-11": 1,
+                "NIST-AC-6": 2,
+                "NIST-SC-8": 3,
+                "NIST-AU-3": 3,
+                "ISO-A.12.4": 2,
+                "NIST-AU-8": 3,
+                "NIST-SC-12": 1
+            }
+        },
+        {
+            "device_name": "juniper_srx.cfg",
+            "config_file": "configs/juniper_srx.cfg",
+            "detected_vendor": "juniper",
+            "total_rules": 61,
+            "passed_rules": [
+                {
+                    "rule_id": "AUTH-001",
+                    "category": "Authentication",
+                    "description": "Enable AAA new-model for centralized authentication, authorization, and accounting",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-IA-2",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 3: set system authentication-order radius | Line 4: set system authentication-order password | Line 20: set system radius-server 10.0.0.5 secret \"$9$encrypted...\"",
+                    "remediation": "aaa new-model",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-002",
+                    "category": "Authentication",
+                    "description": "AAA authentication must be configured for SSH, login, or enable access",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-2"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 3: set system authentication-order radius | Line 4: set system authentication-order password | Line 18: set system login user admin class super-user",
+                    "remediation": "aaa authentication login default local\naaa authentication ssh console LOCAL",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-003",
+                    "category": "Authentication",
+                    "description": "AAA authentication login history should be enabled for audit trail",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AU-2"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 7: set system login retry-options tries-before-disconnect 3 | Line 8: set system login retry-options lockout-period 15",
+                    "remediation": "aaa authentication login-history",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "AUTH-004",
+                    "category": "Authentication",
+                    "description": "Cleartext 'enable password' should not be used; use 'enable secret' with strong hashing instead",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no enable password\nenable algorithm-type scrypt secret <strong-password>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-005",
+                    "category": "Authentication",
+                    "description": "Password encryption service must be enabled to protect stored passwords",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-IA-5",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 10: set system login password minimum-length 15 | Line 11: set system login password minimum-upper-cases 1 | Line 12: set system login password minimum-lower-cases 1",
+                    "remediation": "service password-encryption",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-006",
+                    "category": "Authentication",
+                    "description": "Local user accounts must use strong passwords (min 8 chars, not easily guessable)",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-5"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 18: set system login user admin class super-user",
+                    "remediation": "username <user> privilege 15 algorithm-type scrypt secret <strong-password>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-007",
+                    "category": "Authentication",
+                    "description": "AAA accounting must be configured to log all administrative actions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 31: set system syslog host 10.0.0.10 any info | Line 32: set system syslog host 10.0.0.11 any info | Line 35: set system syslog file messages change-log info",
+                    "remediation": "aaa accounting exec default start-stop group tacacs+\naaa accounting commands 15 default start-stop group tacacs+",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "AUTH-008",
+                    "category": "Authentication",
+                    "description": "AAA authorization must be configured for command-level access control",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-2"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 16: set system login class ADMIN permissions all",
+                    "remediation": "aaa authorization exec default local\naaa authorization commands 15 default local",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-001",
+                    "category": "Access Control",
+                    "description": "Telnet must be disabled on all VTY lines; use SSH only",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-17"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "line vty 0 4\n transport input ssh",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-002",
+                    "category": "Access Control",
+                    "description": "SSH must be configured as the only remote access method on VTY lines",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 22: set system services ssh protocol-version v2 | Line 23: set system services ssh connection-limit 3 | Line 24: set system services ssh max-sessions-per-connection 3",
+                    "remediation": "line vty 0 4\n transport input ssh",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-003",
+                    "category": "Access Control",
+                    "description": "SSH access must be restricted to specific subnets/interfaces",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 28: set system services ssh root-login deny | Line 50: set firewall family inet filter RESTRICT_MGMT_ACCESS term ALLOW_SSH from source-address 192.168.0.0/16 | Line 51: set firewall family inet filter RESTRICT_MGMT_ACCESS term ALLOW_SSH from protocol tcp",
+                    "remediation": "ssh <trusted-subnet> <mask> <interface>",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-004",
+                    "category": "Access Control",
+                    "description": "SSH strict host key checking should be enabled to prevent MITM attacks",
+                    "benchmark_sources": [
+                        "STIG-NDM",
+                        "NIST-IA-5"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 25: set system services ssh macs hmac-sha2-256 | Line 29: set system services ssh hostkey-algorithm ssh-rsa",
+                    "remediation": "ssh stricthostkeycheck",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-005",
+                    "category": "Access Control",
+                    "description": "SSH session timeout must be configured to prevent idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 9: set system login idle-timeout 10 | Line 17: set system login class ADMIN idle-timeout 5 | Line 23: set system services ssh connection-limit 3",
+                    "remediation": "ssh timeout 5",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-006",
+                    "category": "Access Control",
+                    "description": "SSH key exchange must use strong groups (dh-group14-sha256 or higher); dh-group1-sha1 and dh-group5-sha1 are cryptographically weak",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 25: set system services ssh macs hmac-sha2-256",
+                    "remediation": "ssh key-exchange group dh-group14-sha256",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-007",
+                    "category": "Access Control",
+                    "description": "Console timeout must be set to a non-zero value to prevent unauthorized access from idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-11"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 9: set system login idle-timeout 10",
+                    "remediation": "console timeout 5",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-008",
+                    "category": "Access Control",
+                    "description": "Telnet timeout configuration suggests Telnet may be in use; Telnet should be completely disabled",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no telnet timeout\nclear configure telnet",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-009",
+                    "category": "Access Control",
+                    "description": "VTY lines should have access-class applied to restrict management access to trusted IPs",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AC-3",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 49: set interfaces lo0 unit 0 family inet filter input RESTRICT_MGMT_ACCESS | Line 50: set firewall family inet filter RESTRICT_MGMT_ACCESS term ALLOW_SSH from source-address 192.168.0.0/16 | Line 51: set firewall family inet filter RESTRICT_MGMT_ACCESS term ALLOW_SSH from protocol tcp",
+                    "remediation": "access-list 10 permit <trusted-network> <wildcard>\nline vty 0 4\n access-class 10 in",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-010",
+                    "category": "Access Control",
+                    "description": "Exec timeout must be set on console and VTY lines to auto-disconnect idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 9: set system login idle-timeout 10 | Line 17: set system login class ADMIN idle-timeout 5",
+                    "remediation": "line con 0\n exec-timeout 5 0\nline vty 0 4\n exec-timeout 5 0",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-011",
+                    "category": "Access Control",
+                    "description": "SSH version 2 must be enforced; SSH version 1 has known vulnerabilities",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 22: set system services ssh protocol-version v2",
+                    "remediation": "ip ssh version 2",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-001",
+                    "category": "SNMP",
+                    "description": "Default SNMP community string 'public' must not be used",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-6"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no snmp-server community public",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-002",
+                    "category": "SNMP",
+                    "description": "Default SNMP community string 'private' must not be used",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-6"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no snmp-server community private",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-003",
+                    "category": "SNMP",
+                    "description": "SNMPv3 should be configured for encrypted and authenticated SNMP communications",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 55: set snmp v3 usm local-engine user snmpuser authentication-sha authentication-password \"securepass\" | Line 56: set snmp v3 usm local-engine user snmpuser privacy-aes128 privacy-password \"privpass\" | Line 57: set snmp v3 target-parameters tp1 parameters security-level privacy",
+                    "remediation": "snmp-server group <group-name> v3 priv",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-001",
+                    "category": "Logging",
+                    "description": "Syslog server must be configured for centralized log collection and analysis",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3",
+                        "ISO-A.12.4"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 31: set system syslog host 10.0.0.10 any info | Line 32: set system syslog host 10.0.0.11 any info",
+                    "remediation": "logging host <syslog-server-ip>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "LOG-002",
+                    "category": "Logging",
+                    "description": "Local logging buffer must be configured for on-device log retention",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 33: set system syslog file messages any notice | Line 34: set system syslog file messages authorization info | Line 35: set system syslog file messages change-log info",
+                    "remediation": "logging buffered informational",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-003",
+                    "category": "Logging",
+                    "description": "Log messages must include timestamps with date/time for accurate forensic analysis",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8",
+                        "ISO-A.12.4"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 2: set system time-zone UTC | Line 39: set system syslog time-format year millisecond",
+                    "remediation": "service timestamps log datetime msec localtime show-timezone",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-004",
+                    "category": "Logging",
+                    "description": "Logging trap level should be configured for appropriate syslog message filtering",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 31: set system syslog host 10.0.0.10 any info | Line 32: set system syslog host 10.0.0.11 any info | Line 33: set system syslog file messages any notice",
+                    "remediation": "logging trap informational",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-002",
+                    "category": "Crypto",
+                    "description": "CA trustpool policy should be configured for certificate validation",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-12"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 64: set security pki ca-profile CA-PROFILE ca-identity \"Enterprise-CA\"",
+                    "remediation": "crypto ca trustpool policy",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-003",
+                    "category": "Crypto",
+                    "description": "RSA keys must be generated with a minimum modulus of 2048 bits for SSH",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 25: set system services ssh macs hmac-sha2-256 | Line 26: set system services ssh ciphers aes256-cbc | Line 29: set system services ssh hostkey-algorithm ssh-rsa",
+                    "remediation": "crypto key generate rsa modulus 2048",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "MGMT-001",
+                    "category": "Management",
+                    "description": "Login banner must be configured to display legal/warning notice before authentication",
+                    "benchmark_sources": [
+                        "STIG-NDM",
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 5: set system login message \"Authorized access only. All activity is monitored.\"",
+                    "remediation": "banner login @\nAuthorized access only. All activity is monitored and recorded.\n@",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "MGMT-002",
+                    "category": "Management",
+                    "description": "MOTD banner should be configured to display operational warnings",
+                    "benchmark_sources": [
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 6: set system login announcement \"Maintenance window: Sundays 02:00-04:00 UTC\"",
+                    "remediation": "banner motd @\nWARNING: Unauthorized access is prohibited.\n@",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "MGMT-003",
+                    "category": "Management",
+                    "description": "Hostname must be set for device identification in logs and management",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 1: set system host-name JUNIPER-FW01",
+                    "remediation": "hostname <device-name>",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "THREAT-001",
+                    "category": "Threat Detection",
+                    "description": "Basic threat detection must be enabled to identify common attack patterns",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 61: set security screen ids-option untrust-screen tcp syn-flood alarm-threshold 1024 | Line 62: set security screen ids-option untrust-screen tcp syn-flood attack-threshold 200 | Line 63: set security screen ids-option untrust-screen tcp syn-flood source-threshold 1024",
+                    "remediation": "threat-detection basic-threat",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "THREAT-002",
+                    "category": "Threat Detection",
+                    "description": "Threat detection ACL statistics should be enabled for monitoring denied traffic patterns",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 61: set security screen ids-option untrust-screen tcp syn-flood alarm-threshold 1024 | Line 62: set security screen ids-option untrust-screen tcp syn-flood attack-threshold 200 | Line 63: set security screen ids-option untrust-screen tcp syn-flood source-threshold 1024",
+                    "remediation": "threat-detection statistics access-list",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "THREAT-003",
+                    "category": "Threat Detection",
+                    "description": "TCP intercept statistics should be enabled for SYN flood detection",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 61: set security screen ids-option untrust-screen tcp syn-flood alarm-threshold 1024 | Line 62: set security screen ids-option untrust-screen tcp syn-flood attack-threshold 200 | Line 63: set security screen ids-option untrust-screen tcp syn-flood source-threshold 1024",
+                    "remediation": "threat-detection statistics tcp-intercept",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "INTF-001",
+                    "category": "Interface",
+                    "description": "Unused interfaces should be administratively shut down to reduce attack surface",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 47: set interfaces ge-0/0/2 disable",
+                    "remediation": "interface <interface-id>\n shutdown",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "INTF-002",
+                    "category": "Interface",
+                    "description": "Management interface should be restricted to management traffic only",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 49: set interfaces lo0 unit 0 family inet filter input RESTRICT_MGMT_ACCESS",
+                    "remediation": "interface Management1/1\n management-only",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "NTP-001",
+                    "category": "NTP",
+                    "description": "NTP server must be configured for accurate time synchronization across all log sources",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 40: set system ntp server 10.0.0.1 prefer | Line 41: set system ntp server 10.0.0.2",
+                    "remediation": "ntp server <ntp-server-ip>",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "NTP-002",
+                    "category": "NTP",
+                    "description": "NTP authentication must be enabled to prevent time-source spoofing",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 42: set system ntp authentication-key 1 type md5 value \"$9$encrypted\" | Line 43: set system ntp trusted-key [1 2]",
+                    "remediation": "ntp authenticate\nntp authentication-key 1 md5 <key>\nntp trusted-key 1",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ROUTE-001",
+                    "category": "Routing",
+                    "description": "OSPF authentication must be enabled to prevent unauthorized route injection",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 58: set protocols ospf area 0.0.0.0 interface ge-0/0/0.0 authentication md5 1 key \"$9$encrypted\"",
+                    "remediation": "interface <interface>\n ip ospf authentication message-digest\n ip ospf message-digest-key 1 md5 <key>",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ROUTE-002",
+                    "category": "Routing",
+                    "description": "BGP neighbor authentication must be configured to prevent unauthorized peering",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 59: set protocols bgp group EBGP-PEERS peer-as 65001 | Line 60: set protocols bgp group EBGP-PEERS authentication-key \"$9$encrypted\"",
+                    "remediation": "router bgp <as-number>\n neighbor <ip> password <key>",
+                    "weight": 3
+                }
+            ],
+            "failed_rules": [
+                {
+                    "rule_id": "SNMP-004",
+                    "category": "SNMP",
+                    "description": "SNMP location should be cleared or set to a non-revealing value to avoid information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no snmp-server location",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SNMP-005",
+                    "category": "SNMP",
+                    "description": "SNMP contact should be cleared or set to a non-revealing value to avoid information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no snmp-server contact",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-001",
+                    "category": "Services",
+                    "description": "HTTP server must be disabled to prevent unencrypted management access",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip http server",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-002",
+                    "category": "Services",
+                    "description": "HTTPS server should be disabled unless explicitly required for device management",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip http secure-server",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-003",
+                    "category": "Services",
+                    "description": "CDP should be disabled globally or on untrusted interfaces to prevent information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no cdp run",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-004",
+                    "category": "Services",
+                    "description": "LLDP should be disabled to prevent network topology disclosure",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no lldp run",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-005",
+                    "category": "Services",
+                    "description": "IP source routing must be disabled to prevent routing manipulation attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip source-route",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-006",
+                    "category": "Services",
+                    "description": "IP directed broadcasts must be disabled to prevent smurf amplification attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip directed-broadcast",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-007",
+                    "category": "Services",
+                    "description": "Finger service must be disabled to prevent user enumeration",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no service finger",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-008",
+                    "category": "Services",
+                    "description": "BOOTP server must be disabled to prevent unauthorized network booting",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip bootp server",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-009",
+                    "category": "Services",
+                    "description": "Proxy ARP must be disabled to prevent traffic interception",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip proxy-arp",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-010",
+                    "category": "Services",
+                    "description": "TCP keepalives (inbound) should be enabled to clean up dead sessions",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service tcp-keepalives-in",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-011",
+                    "category": "Services",
+                    "description": "TCP keepalives (outbound) should be enabled to clean up dead sessions",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service tcp-keepalives-out",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-012",
+                    "category": "Services",
+                    "description": "FTP passive mode should be configured for secure file transfers",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ftp mode passive",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-013",
+                    "category": "Services",
+                    "description": "ASDM history should be disabled if ASDM is not in active use",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no asdm history enable",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-014",
+                    "category": "Services",
+                    "description": "Call-home and anonymous reporting should be disabled to prevent information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no call-home reporting anonymous\ncall-home\n profile CiscoTAC-1\n  no active",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-015",
+                    "category": "Services",
+                    "description": "ICMP unreachable messages should be rate-limited to mitigate reconnaissance",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "icmp unreachable rate-limit 1 burst-size 1",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-016",
+                    "category": "Services",
+                    "description": "ARP rate limiting should be configured to mitigate ARP flooding attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "arp rate-limit 16384",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-017",
+                    "category": "Services",
+                    "description": "Non-connected ARP entries should be denied to prevent ARP spoofing",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no arp permit-nonconnected",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-001",
+                    "category": "Crypto",
+                    "description": "IPsec SA PMTU aging should be configured for proper tunnel maintenance",
+                    "benchmark_sources": [
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "crypto ipsec security-association pmtu-aging infinite",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "DAP-001",
+                    "category": "Access Control",
+                    "description": "Dynamic access policy should be configured for VPN access control",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "dynamic-access-policy-record DfltAccessPolicy",
+                    "weight": 1
+                }
+            ],
+            "unknown_commands": [],
+            "security_score": 140,
+            "max_score": 184,
+            "risk_level": "MEDIUM",
+            "benchmark_coverage": {
+                "CIS": 58,
+                "NIST-IA-2": 3,
+                "STIG-NDM": 42,
+                "NIST-AU-2": 1,
+                "NIST-IA-5": 3,
+                "NIST-AC-17": 1,
+                "NIST-AC-3": 4,
+                "NIST-SC-13": 3,
+                "NIST-AC-11": 1,
+                "NIST-AC-6": 2,
+                "NIST-SC-8": 3,
+                "NIST-AU-3": 3,
+                "ISO-A.12.4": 2,
+                "NIST-AU-8": 3,
+                "NIST-SC-12": 1
+            }
+        },
+        {
+            "device_name": "aruba_aoscx_partial.cfg",
+            "config_file": "aruba_aoscx_partial.cfg",
+            "detected_vendor": "aruba",
+            "total_rules": 61,
+            "passed_rules": [
+                {
+                    "rule_id": "AUTH-004",
+                    "category": "Authentication",
+                    "description": "Cleartext 'enable password' should not be used; use 'enable secret' with strong hashing instead",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no enable password\nenable algorithm-type scrypt secret <strong-password>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-001",
+                    "category": "Access Control",
+                    "description": "Telnet must be disabled on all VTY lines; use SSH only",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-17"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "line vty 0 4\n transport input ssh",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-008",
+                    "category": "Access Control",
+                    "description": "Telnet timeout configuration suggests Telnet may be in use; Telnet should be completely disabled",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no telnet timeout\nclear configure telnet",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SNMP-001",
+                    "category": "SNMP",
+                    "description": "Default SNMP community string 'public' must not be used",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-6"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no snmp-server community public",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-002",
+                    "category": "SNMP",
+                    "description": "Default SNMP community string 'private' must not be used",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-6"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Not present (compliant)",
+                    "remediation": "no snmp-server community private",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "MGMT-002",
+                    "category": "Management",
+                    "description": "MOTD banner should be configured to display operational warnings",
+                    "benchmark_sources": [
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 67: banner motd ^",
+                    "remediation": "banner motd @\nWARNING: Unauthorized access is prohibited.\n@",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "MGMT-003",
+                    "category": "Management",
+                    "description": "Hostname must be set for device identification in logs and management",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 5: hostname ARUBA-CORE-SW01",
+                    "remediation": "hostname <device-name>",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "INTF-001",
+                    "category": "Interface",
+                    "description": "Unused interfaces should be administratively shut down to reduce attack surface",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 53: no shutdown | Line 58: no shutdown | Line 62: no shutdown",
+                    "remediation": "interface <interface-id>\n shutdown",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "NTP-001",
+                    "category": "NTP",
+                    "description": "NTP server must be configured for accurate time synchronization across all log sources",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8"
+                    ],
+                    "severity": "PASS",
+                    "status": true,
+                    "evidence": "Line 72: ntp server 10.0.0.1",
+                    "remediation": "ntp server <ntp-server-ip>",
+                    "weight": 4
+                }
+            ],
+            "failed_rules": [
+                {
+                    "rule_id": "AUTH-001",
+                    "category": "Authentication",
+                    "description": "Enable AAA new-model for centralized authentication, authorization, and accounting",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-IA-2",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa new-model",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-002",
+                    "category": "Authentication",
+                    "description": "AAA authentication must be configured for SSH, login, or enable access",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-2"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa authentication login default local\naaa authentication ssh console LOCAL",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-003",
+                    "category": "Authentication",
+                    "description": "AAA authentication login history should be enabled for audit trail",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AU-2"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa authentication login-history",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "AUTH-005",
+                    "category": "Authentication",
+                    "description": "Password encryption service must be enabled to protect stored passwords",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-IA-5",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service password-encryption",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-006",
+                    "category": "Authentication",
+                    "description": "Local user accounts must use strong passwords (min 8 chars, not easily guessable)",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-5"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "username <user> privilege 15 algorithm-type scrypt secret <strong-password>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "AUTH-007",
+                    "category": "Authentication",
+                    "description": "AAA accounting must be configured to log all administrative actions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa accounting exec default start-stop group tacacs+\naaa accounting commands 15 default start-stop group tacacs+",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "AUTH-008",
+                    "category": "Authentication",
+                    "description": "AAA authorization must be configured for command-level access control",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-IA-2"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "aaa authorization exec default local\naaa authorization commands 15 default local",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-002",
+                    "category": "Access Control",
+                    "description": "SSH must be configured as the only remote access method on VTY lines",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "line vty 0 4\n transport input ssh",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "ACCESS-003",
+                    "category": "Access Control",
+                    "description": "SSH access must be restricted to specific subnets/interfaces",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ssh <trusted-subnet> <mask> <interface>",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-004",
+                    "category": "Access Control",
+                    "description": "SSH strict host key checking should be enabled to prevent MITM attacks",
+                    "benchmark_sources": [
+                        "STIG-NDM",
+                        "NIST-IA-5"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ssh stricthostkeycheck",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-005",
+                    "category": "Access Control",
+                    "description": "SSH session timeout must be configured to prevent idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ssh timeout 5",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-006",
+                    "category": "Access Control",
+                    "description": "SSH key exchange must use strong groups (dh-group14-sha256 or higher); dh-group1-sha1 and dh-group5-sha1 are cryptographically weak",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ssh key-exchange group dh-group14-sha256",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-007",
+                    "category": "Access Control",
+                    "description": "Console timeout must be set to a non-zero value to prevent unauthorized access from idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-11"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "console timeout 5",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "ACCESS-009",
+                    "category": "Access Control",
+                    "description": "VTY lines should have access-class applied to restrict management access to trusted IPs",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AC-3",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "access-list 10 permit <trusted-network> <wildcard>\nline vty 0 4\n access-class 10 in",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-010",
+                    "category": "Access Control",
+                    "description": "Exec timeout must be set on console and VTY lines to auto-disconnect idle sessions",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "line con 0\n exec-timeout 5 0\nline vty 0 4\n exec-timeout 5 0",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ACCESS-011",
+                    "category": "Access Control",
+                    "description": "SSH version 2 must be enforced; SSH version 1 has known vulnerabilities",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM",
+                        "NIST-AC-3"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ip ssh version 2",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "SNMP-003",
+                    "category": "SNMP",
+                    "description": "SNMPv3 should be configured for encrypted and authenticated SNMP communications",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "snmp-server group <group-name> v3 priv",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SNMP-004",
+                    "category": "SNMP",
+                    "description": "SNMP location should be cleared or set to a non-revealing value to avoid information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no snmp-server location",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SNMP-005",
+                    "category": "SNMP",
+                    "description": "SNMP contact should be cleared or set to a non-revealing value to avoid information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no snmp-server contact",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-001",
+                    "category": "Services",
+                    "description": "HTTP server must be disabled to prevent unencrypted management access",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip http server",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-002",
+                    "category": "Services",
+                    "description": "HTTPS server should be disabled unless explicitly required for device management",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip http secure-server",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-003",
+                    "category": "Services",
+                    "description": "CDP should be disabled globally or on untrusted interfaces to prevent information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no cdp run",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-004",
+                    "category": "Services",
+                    "description": "LLDP should be disabled to prevent network topology disclosure",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no lldp run",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-005",
+                    "category": "Services",
+                    "description": "IP source routing must be disabled to prevent routing manipulation attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip source-route",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-006",
+                    "category": "Services",
+                    "description": "IP directed broadcasts must be disabled to prevent smurf amplification attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip directed-broadcast",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "SVC-007",
+                    "category": "Services",
+                    "description": "Finger service must be disabled to prevent user enumeration",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no service finger",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-008",
+                    "category": "Services",
+                    "description": "BOOTP server must be disabled to prevent unauthorized network booting",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip bootp server",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-009",
+                    "category": "Services",
+                    "description": "Proxy ARP must be disabled to prevent traffic interception",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no ip proxy-arp",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "SVC-010",
+                    "category": "Services",
+                    "description": "TCP keepalives (inbound) should be enabled to clean up dead sessions",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service tcp-keepalives-in",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-011",
+                    "category": "Services",
+                    "description": "TCP keepalives (outbound) should be enabled to clean up dead sessions",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service tcp-keepalives-out",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-012",
+                    "category": "Services",
+                    "description": "FTP passive mode should be configured for secure file transfers",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ftp mode passive",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-013",
+                    "category": "Services",
+                    "description": "ASDM history should be disabled if ASDM is not in active use",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no asdm history enable",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-014",
+                    "category": "Services",
+                    "description": "Call-home and anonymous reporting should be disabled to prevent information disclosure",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no call-home reporting anonymous\ncall-home\n profile CiscoTAC-1\n  no active",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "SVC-015",
+                    "category": "Services",
+                    "description": "ICMP unreachable messages should be rate-limited to mitigate reconnaissance",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "icmp unreachable rate-limit 1 burst-size 1",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-016",
+                    "category": "Services",
+                    "description": "ARP rate limiting should be configured to mitigate ARP flooding attacks",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "arp rate-limit 16384",
+                    "weight": 1
+                },
+                {
+                    "rule_id": "SVC-017",
+                    "category": "Services",
+                    "description": "Non-connected ARP entries should be denied to prevent ARP spoofing",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "no arp permit-nonconnected",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "LOG-001",
+                    "category": "Logging",
+                    "description": "Syslog server must be configured for centralized log collection and analysis",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3",
+                        "ISO-A.12.4"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "logging host <syslog-server-ip>",
+                    "weight": 5
+                },
+                {
+                    "rule_id": "LOG-002",
+                    "category": "Logging",
+                    "description": "Local logging buffer must be configured for on-device log retention",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "logging buffered informational",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-003",
+                    "category": "Logging",
+                    "description": "Log messages must include timestamps with date/time for accurate forensic analysis",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8",
+                        "ISO-A.12.4"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "service timestamps log datetime msec localtime show-timezone",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "LOG-004",
+                    "category": "Logging",
+                    "description": "Logging trap level should be configured for appropriate syslog message filtering",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-3"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "logging trap informational",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-001",
+                    "category": "Crypto",
+                    "description": "IPsec SA PMTU aging should be configured for proper tunnel maintenance",
+                    "benchmark_sources": [
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "crypto ipsec security-association pmtu-aging infinite",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-002",
+                    "category": "Crypto",
+                    "description": "CA trustpool policy should be configured for certificate validation",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-12"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "crypto ca trustpool policy",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "CRYPTO-003",
+                    "category": "Crypto",
+                    "description": "RSA keys must be generated with a minimum modulus of 2048 bits for SSH",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-13",
+                        "STIG-NDM"
+                    ],
+                    "severity": "HIGH",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "crypto key generate rsa modulus 2048",
+                    "weight": 4
+                },
+                {
+                    "rule_id": "MGMT-001",
+                    "category": "Management",
+                    "description": "Login banner must be configured to display legal/warning notice before authentication",
+                    "benchmark_sources": [
+                        "STIG-NDM",
+                        "CIS"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "banner login @\nAuthorized access only. All activity is monitored and recorded.\n@",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "THREAT-001",
+                    "category": "Threat Detection",
+                    "description": "Basic threat detection must be enabled to identify common attack patterns",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "threat-detection basic-threat",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "THREAT-002",
+                    "category": "Threat Detection",
+                    "description": "Threat detection ACL statistics should be enabled for monitoring denied traffic patterns",
+                    "benchmark_sources": [
+                        "CIS"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "threat-detection statistics access-list",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "THREAT-003",
+                    "category": "Threat Detection",
+                    "description": "TCP intercept statistics should be enabled for SYN flood detection",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "threat-detection statistics tcp-intercept",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "INTF-002",
+                    "category": "Interface",
+                    "description": "Management interface should be restricted to management traffic only",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "interface Management1/1\n management-only",
+                    "weight": 2
+                },
+                {
+                    "rule_id": "NTP-002",
+                    "category": "NTP",
+                    "description": "NTP authentication must be enabled to prevent time-source spoofing",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-AU-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "ntp authenticate\nntp authentication-key 1 md5 <key>\nntp trusted-key 1",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ROUTE-001",
+                    "category": "Routing",
+                    "description": "OSPF authentication must be enabled to prevent unauthorized route injection",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "interface <interface>\n ip ospf authentication message-digest\n ip ospf message-digest-key 1 md5 <key>",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "ROUTE-002",
+                    "category": "Routing",
+                    "description": "BGP neighbor authentication must be configured to prevent unauthorized peering",
+                    "benchmark_sources": [
+                        "CIS",
+                        "NIST-SC-8"
+                    ],
+                    "severity": "MEDIUM",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "router bgp <as-number>\n neighbor <ip> password <key>",
+                    "weight": 3
+                },
+                {
+                    "rule_id": "DAP-001",
+                    "category": "Access Control",
+                    "description": "Dynamic access policy should be configured for VPN access control",
+                    "benchmark_sources": [
+                        "CIS",
+                        "STIG-NDM"
+                    ],
+                    "severity": "LOW",
+                    "status": false,
+                    "evidence": "Configuration not found",
+                    "remediation": "dynamic-access-policy-record DfltAccessPolicy",
+                    "weight": 1
+                }
+            ],
+            "unknown_commands": [
+                {
+                    "line_number": 7,
+                    "command": "no ip icmp redirect",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 38,
+                    "command": "snmp-server community \"public\" access-level ro",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 39,
+                    "command": "snmp-server system-contact \"netops@example.com\"",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 40,
+                    "command": "snmp-server system-location \"DC1-Rack12\"",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 41,
+                    "command": "snmp-server vrf default",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 68,
+                    "command": "Authorized access only. All activity is logged.",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                },
+                {
+                    "line_number": 69,
+                    "command": "^",
+                    "status": "UNKNOWN \u2014 NEEDS HUMAN REVIEW"
+                }
+            ],
+            "security_score": 33,
+            "max_score": 184,
+            "risk_level": "CRITICAL",
+            "benchmark_coverage": {
+                "CIS": 58,
+                "NIST-IA-2": 3,
+                "STIG-NDM": 42,
+                "NIST-AU-2": 1,
+                "NIST-IA-5": 3,
+                "NIST-AC-17": 1,
+                "NIST-AC-3": 4,
+                "NIST-SC-13": 3,
+                "NIST-AC-11": 1,
+                "NIST-AC-6": 2,
+                "NIST-SC-8": 3,
+                "NIST-AU-3": 3,
+                "ISO-A.12.4": 2,
+                "NIST-AU-8": 3,
+                "NIST-SC-12": 1
+            }
+        }
+    ]
+}
